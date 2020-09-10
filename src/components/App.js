@@ -1,45 +1,17 @@
 import React from 'react';
-import logoPath from '../images/logo.svg'
+import Header from './Header'
+import Main from './Main'
+import Footer from './Footer'
 
 function App() {
-  return (
+return (
     <div className="App">
-      <div className="page">
+        <div className="page">
         <div className="page__container">
-                    <header className="header page__header section">
-                        <a href="#" className="logo header__logo">
-                            <img
-                                className="logo__image"
-                                src={logoPath}
-                                alt="Логотип проекта Mesto"
-                            />
-                        </a>
-                    </header>
-                    <main className="content page__content section">
-                        <section className="profile section">
-                            <div className="profile__image"></div>
-                            <div className="profile__info">
-                                <div className="profile__name-wrap">
-                                    <h1 className="profile__name"></h1>
-                                    <button
-                                        className="link profile__edit-button"                                      
-                                    ></button>
-                                </div>
-                                <p className="profile__job"></p>
-                            </div>
-                            <button
-                                className="link profile__add-button"                            
-                            ></button>
-                        </section>
-                        <section className="places section">
-                            <ul className="places__list">
-                                <li className="places__empty-list">Нет добавленных мест</li>
-                            </ul>
-                        </section>
-                    </main>
-                    <footer className="footer section page__footer">
-                        <p className="footer__copyright">&copy; 2020 Mesto Russia</p>
-                    </footer>
+            <Header/>
+            <Main/>
+            <Footer/>
+            
                     <section
                         className="popup popup_type_edit-profile"                  
                     >
