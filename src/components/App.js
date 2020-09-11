@@ -1,19 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import api from '../utils/Api'
 import Header from './Header'
 import Main from './Main'
 import Footer from './Footer'
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
 
-function App() {
-    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
-        false
-    )
-    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
-    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(
-        false
-    )
 
+function App() {
+    //состояние попапов
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+
+    // данные пользователя
+    const [userAvatar, setUserAvatar] = useState()
+    const [userName, setUserName] = useState('Жак Ив Кусто')
+    const [userDescription, setUserInfo] = useState('Мореплаватель')
+
+    // устанавливает данные пользователя
+    function setUserData(userData) {
+        setUserAvatar(userData.avatar)
+        setUserName(userData.name)
+        setUserInfo(userData.about)
+    }
+
+    // открывают попапы
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true)
     }
@@ -26,6 +38,24 @@ function App() {
         setIsAddPlacePopupOpen(true)
     }
 
+    // закрывает все попапы меняя их состояние 
+    function closeAllPopups() {
+        setIsEditAvatarPopupOpen(false)
+        setIsEditProfilePopupOpen(false)
+        setIsAddPlacePopupOpen(false)
+    }
+
+    // при монтировании компонента будет совершать запрос в API за пользовательскими данными
+    useEffect(() => {
+        api.getItems('users/me')
+            .then((userData) => {
+                // отображает данные пользователья в профиле
+                setUserData(userData)})
+            .catch((err) => {
+                console.log(err)
+            })
+        }, []);
+    
     return (
         <div className="App">
             <div className="page">
@@ -35,6 +65,9 @@ function App() {
                         onEditProfile={handleEditProfileClick}
                         onAddPlace={handleAddPlaceClick}
                         onEditAvatar={handleEditAvatarClick}
+                        userAvatar={userAvatar}
+                        userName={userName}
+                        userDescription={userDescription}
                     />
                     <Footer />
                     <PopupWithForm
@@ -42,6 +75,7 @@ function App() {
                         name="edit-profile"
                         buttonText="Сохранить"
                         isOpen={isEditProfilePopupOpen}
+                        onClose={closeAllPopups}
                         children={
                             <>
                                 <label className="popup__label">
@@ -79,6 +113,7 @@ function App() {
                         name="add-place"
                         buttonText="Создать"
                         isOpen={isAddPlacePopupOpen}
+                        onClose={closeAllPopups}
                         children={
                             <>
                                 <label className="popup__label">
@@ -114,6 +149,7 @@ function App() {
                         name="edit-avatar"
                         buttonText="Сохранить"
                         isOpen={isEditAvatarPopupOpen}
+                        onClose={closeAllPopups}
                         children={
                             <>
                                 <label className="popup__label">
@@ -136,9 +172,11 @@ function App() {
                         name="card-delete"
                         buttonText="Да"
                         isOpen={false}
+                        onClose={closeAllPopups}
                         children={<></>}
                     />
 
+                    <ImagePopup />
                     <section className="popup popup_type_picture-zoom">
                         <div className="popup__container-pic-zoom">
                             <button className="link popup__close-button"></button>

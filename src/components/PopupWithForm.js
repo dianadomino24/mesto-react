@@ -1,6 +1,6 @@
 import React from 'react'
 
-function PopupWithForm({ title, name, buttonText, isOpen, children, ...rest }) {
+function PopupWithForm({ title, name, buttonText, isOpen, onClose, children, ...rest }) {
     return (
         <section
             className={`popup popup_type_${name} ${
@@ -8,7 +8,7 @@ function PopupWithForm({ title, name, buttonText, isOpen, children, ...rest }) {
             }`}
         >
             <div className="popup__container">
-                <button className="link popup__close-button"></button>
+                <button className="link popup__close-button" onClick={onClose}></button>
                 <form
                     className={`popup__form popup__form_type_${name}`}
                     noValidate
