@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 function ImagePopup() {
-    return 
+    return
 }
 
 export default ImagePopup
