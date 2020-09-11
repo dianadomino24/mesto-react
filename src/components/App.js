@@ -2,67 +2,78 @@ import React from 'react';
 import Header from './Header'
 import Main from './Main'
 import Footer from './Footer'
+import PopupWithForm from './PopupWithForm'
+import ImagePopup from './ImagePopup'
 
 function App() {
-return (
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false)
+
+    function handleEditAvatarClick () {
+        setIsEditAvatarPopupOpen(true)
+    }
+
+    function handleEditProfileClick () {
+        setIsEditProfilePopupOpen(true)
+    }
+
+    function handleAddPlaceClick () {
+        setIsAddPlacePopupOpen(true)
+    }
+
+    return (
     <div className="App">
         <div className="page">
         <div className="page__container">
             <Header/>
-            <Main/>
+            <Main 
+                onEditProfile={handleEditProfileClick} 
+                onAddPlace={handleAddPlaceClick} 
+                onEditAvatar={handleEditAvatarClick} />
             <Footer/>
-            
-                    <section
-                        className="popup popup_type_edit-profile"                  
-                    >
-                        <div className="popup__container">
-                            <button className="link popup__close-button"></button>
-                            <form
-                                className="popup__form popup__form_type_profile"
-                                noValidate
-                            >
-                                <h2 className="popup__title">Редактировать профиль</h2>
-                                <fieldset className="popup__fieldset">
-                                    <label className="popup__label">
-                                        <input
-                                            type="text"
-                                            name="profile-name"
-                                            placeholder="Имя"
-                                            id="profile-name"
-                                            className="input popup__input popup__input_type_name"
-                                            required
-                                            minLength="2"
-                                            maxLength="40"
-                                        />
-                                        <span
-                                            className="popup__input-error js-popup__input-error_type_profile"
-                                        ></span>
-                                    </label>
-                                    <label className="popup__label">
-                                        <input
-                                            type="text"
-                                            name="profile-job"
-                                            id="profile-job"
-                                            placeholder="Род деятельности"
-                                            className="input popup__input popup__input_type_job"
-                                            required
-                                            minLength="2"
-                                            maxLength="200"
-                                        />
-                                        <span
-                                            className="popup__input-error js-popup__input-error_type_profile"
-                                        ></span>
-                                    </label>
-                                    <button
-                                        className="link popup__save-button popup__save-button_type_profile"
-                                        type="submit"
-                                    >
-                                        Сохранить
-                                    </button>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </section>
+            <PopupWithForm 
+                title="Редактировать профиль"
+                name="edit-profile"
+                buttonText="Сохранить"
+                isOpen = {isEditProfilePopupOpen}
+                children=
+                    {
+                <>
+                    <label className="popup__label">
+                    <input
+                        type="text"
+                        name="profile-name"
+                        placeholder="Имя"
+                        id="profile-name"
+                        className="input popup__input popup__input_type_name"
+                        required
+                        minLength="2"
+                        maxLength="40"
+                    />
+                    <span
+                        className="popup__input-error js-popup__input-error_type_profile"
+                    ></span>
+                </label>
+                <label className="popup__label">
+                    <input
+                        type="text"
+                        name="profile-job"
+                        id="profile-job"
+                        placeholder="Род деятельности"
+                        className="input popup__input popup__input_type_job"
+                        required
+                        minLength="2"
+                        maxLength="200"
+                    />
+                    <span
+                        className="popup__input-error js-popup__input-error_type_profile"
+                    ></span>
+                </label>
+                </> }
+            />
+
+                    
                     <section
                         className="popup popup_type_add-place"                    
                     >
