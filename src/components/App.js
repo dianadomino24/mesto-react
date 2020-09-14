@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import api from '../utils/Api'
+import Card from './Card'
 import Header from './Header'
 import Main from './Main'
 import Footer from './Footer'
@@ -17,6 +18,11 @@ function App() {
     const [userAvatar, setUserAvatar] = useState()
     const [userName, setUserName] = useState('Жак Ив Кусто')
     const [userDescription, setUserInfo] = useState('Мореплаватель')
+    
+    // массив карточек мест
+    const [cards, setCards] = useState([]);
+
+    const [currentUserId, setCurrentUserId] = useState()
 
     // устанавливает данные пользователя
     function setUserData(userData) {
@@ -49,8 +55,27 @@ function App() {
     useEffect(() => {
         api.getItems('users/me')
             .then((userData) => {
+                setCurrentUserId(userData._id)
                 // отображает данные пользователья в профиле
                 setUserData(userData)})
+            .catch((err) => {
+                console.log(err)
+            })
+        }, []);
+    
+    // при монтировании компонента будет совершать запрос в API за карточками мест
+    useEffect(() => {
+        api.getItems('cards')
+            .then((serverCards) => {
+                const items = serverCards.map(item => ({
+                    name: item.name,
+                    link: item.link,
+                    _id: item._id,
+                    likes: item.likes,
+                    owner: item.owner,
+                }))
+                setCards(items);
+                })
             .catch((err) => {
                 console.log(err)
             })
@@ -68,6 +93,8 @@ function App() {
                         userAvatar={userAvatar}
                         userName={userName}
                         userDescription={userDescription}
+                        cards={cards}
+                        currentUserId={currentUserId}
                     />
                     <Footer />
                     <PopupWithForm
