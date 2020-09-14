@@ -1,68 +1,66 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Проекты 4-10: Место
 
-## Available Scripts
+**Общее**
 
-In the project directory, you can run:
+В проекте реализован одностраничный сайт с попапами и адаптивными
+карточками для размещения фотографий с подписями. Заполнение формы
+в попапе изменяет информацию на основной странице. Можно сменить аватар профиля.
+Карточки можно добавить, удалить и поставить им лайк. Данные отправляются на сервер,
+другие пользователи также могут поставить лайк.
+При нажатии на изображение всплывает попап с увеличенной картинкой и ее подписью.
+Реализована валидация форм. Попап можно закрыть при клике на overlay или Esc.
 
-### `npm start`
+Использовались css, html, javascript, jsx, react, webpack, babel.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Выполнен рефакторинг на React.
+Использованы реакт-хуки.
+Настроена сборка проекта с помощью Webpack.
+Настроено взаимодействие с сервером (отправка и получение данных).
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+**Figma**
 
-### `npm test`
+-   [Ссылка на макет в Figma 4](https://www.figma.com/file/StZjf8HnoeLdiXS7dYrLAh/JavaScript.-Sprint-4)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-   [Ссылка на макет в Figma 5](https://www.figma.com/file/nlYpT4VhFiwimn2YlncrcF/JavaScript.-Sprint-5?node-id=0%3A1)
 
-### `npm run build`
+-   [Ссылка на макет в Figma 6](https://www.figma.com/file/XNaGNEZD5NEjeyJzAT4gMb/JavaScript.-Sprint-6?node-id=0%3A1)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-   [Ссылка на макет в Figma 9](https://www.figma.com/file/hhhIavVTeuilfPPZ6sbifl/JavaScript.-Sprint-9?node-id=0%3A1)
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+**Ссылка на GitPages**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+[Ссылка на сайт в GitPages](https://dianadomino24.github.io/mesto/index.html)
 
-### `npm run eject`
+**Технологии**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Освоены:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-   рефакторинг кода с использованием React,
+    реакт-хуки (React.useEffect, React.useState),
+    конвертация html в jsx,
+-   настройка взаимодействия с сервером (GET, PUT, DELETE, PATCH, POST методы),
+-   использование асинхронных ф-ций и промисов,
+-   рефакторинг кода с использованием классов из ООП,
+    деструктуризация и слабое связывание классов,
+-   сборка проекта с помощью Webpack(минификация, транспиляция, автопрефиксер),
+-   методы валидации форм, вывод стандартных браузерных текстов ошибок в кастомных стилях,
+    измерение состояния кнопки submit в зависимости от валидности формы,
+-   методы работы с формами в javascript, изменение классов,
+    условные конструкции, метод addEventListener,
+-   методы добавления разметки через template.content.cloneNode,
+-   использование модулей
+-   применение свойств target у event,
+-   метод forEach,
+-   отзывчивая (responsive), адаптивная (adaptive) и
+    резиновая (liquid/fluid) верстки,
+-   flex- и grid- верстка,
+-   Nested файловая структура по БЭМ.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**В перспективе**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+В перспективе необходимо доработать сайт:
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+-   реализовать проверку валидности, используя регулярные выражения
+-   реализовать редактирование текущих карточек
+-   перетаскивание карточек мышью
+-   копирование карточек.

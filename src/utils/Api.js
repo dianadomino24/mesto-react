@@ -70,7 +70,7 @@ class Api {
 const token = '3829caf2-6683-412f-9e00-d0870fcd1817'
 const cohort = 'cohort-14'
 
-const api = new Api ({
+const api = new Api({
     baseUrl: `https://mesto.nomoreparties.co/v1/${cohort}/`,
     headers: {
         authorization: token,

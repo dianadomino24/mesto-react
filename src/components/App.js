@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import api from '../utils/Api'
-import Card from './Card'
+// import Card from './Card'
 import Header from './Header'
 import Main from './Main'
 import Footer from './Footer'
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
-
 
 function App() {
     //состояние попапов
@@ -18,11 +17,14 @@ function App() {
     const [userAvatar, setUserAvatar] = useState()
     const [userName, setUserName] = useState('Жак Ив Кусто')
     const [userDescription, setUserInfo] = useState('Мореплаватель')
-    
-    // массив карточек мест
-    const [cards, setCards] = useState([]);
 
+    // массив карточек мест
+    const [cards, setCards] = useState([])
+    // для определения, чьи карточки (выкл удаление чужих и показать ранее залайканные)
     const [currentUserId, setCurrentUserId] = useState()
+
+    // для попапа с полноразмерной картинкой
+    const [selectedCard, setSelectedCard] = useState()
 
     // устанавливает данные пользователя
     function setUserData(userData) {
@@ -35,20 +37,24 @@ function App() {
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true)
     }
-
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen(true)
     }
-
     function handleAddPlaceClick() {
         setIsAddPlacePopupOpen(true)
     }
 
-    // закрывает все попапы меняя их состояние 
+    //для открытия попапа с увеличенной картинкой
+    function handleCardClick(card) {
+        setSelectedCard(card)
+    }
+
+    // закрывает все попапы меняя их состояние
     function closeAllPopups() {
         setIsEditAvatarPopupOpen(false)
         setIsEditProfilePopupOpen(false)
         setIsAddPlacePopupOpen(false)
+        setSelectedCard()
     }
 
     // при монтировании компонента будет совершать запрос в API за пользовательскими данными
@@ -57,30 +63,31 @@ function App() {
             .then((userData) => {
                 setCurrentUserId(userData._id)
                 // отображает данные пользователья в профиле
-                setUserData(userData)})
+                setUserData(userData)
+            })
             .catch((err) => {
                 console.log(err)
             })
-        }, []);
-    
+    }, [])
+
     // при монтировании компонента будет совершать запрос в API за карточками мест
     useEffect(() => {
         api.getItems('cards')
             .then((serverCards) => {
-                const items = serverCards.map(item => ({
+                const items = serverCards.map((item) => ({
                     name: item.name,
                     link: item.link,
                     _id: item._id,
                     likes: item.likes,
                     owner: item.owner,
                 }))
-                setCards(items);
-                })
+                setCards(items)
+            })
             .catch((err) => {
                 console.log(err)
             })
-        }, []);
-    
+    }, [])
+
     return (
         <div className="App">
             <div className="page">
@@ -95,6 +102,7 @@ function App() {
                         userDescription={userDescription}
                         cards={cards}
                         currentUserId={currentUserId}
+                        handleCardClick={handleCardClick}
                     />
                     <Footer />
                     <PopupWithForm
@@ -203,20 +211,7 @@ function App() {
                         children={<></>}
                     />
 
-                    <ImagePopup />
-                    <section className="popup popup_type_picture-zoom">
-                        <div className="popup__container-pic-zoom">
-                            <button className="link popup__close-button"></button>
-                            <figure className="picture-zoom">
-                                <img
-                                    src="#"
-                                    alt="Фото карточки"
-                                    className="picture-zoom__img"
-                                />
-                                <p className="picture-zoom__title"></p>
-                            </figure>
-                        </div>
-                    </section>
+                    <ImagePopup card={selectedCard} onClose={closeAllPopups} />
                 </div>
             </div>
         </div>
