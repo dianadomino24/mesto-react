@@ -16,25 +16,23 @@ function App() {
     // Данные текущего пользователя будут использованы как контекст
     const [currentUser, setCurrentUser] = useState()
 
-    // данные пользователя
-    const [userAvatar, setUserAvatar] = useState()
-    const [userName, setUserName] = useState('Жак Ив Кусто')
-    const [userDescription, setUserInfo] = useState('Мореплаватель')
+    // // данные пользователя
+    // const [userAvatar, setUserAvatar] = useState()
+    // const [userName, setUserName] = useState('Жак Ив Кусто')
+    // const [userDescription, setUserInfo] = useState('Мореплаватель')
 
-    // массив карточек мест
-    const [cards, setCards] = useState([])
-    // для определения, чьи карточки (выкл удаление чужих и показать ранее залайканные)
-    const [currentUserId, setCurrentUserId] = useState()
+    // // массив карточек мест
+    // const [cards, setCards] = useState([])
 
     // для попапа с полноразмерной картинкой
     const [selectedCard, setSelectedCard] = useState()
 
-    // устанавливает данные пользователя
-    function setUserData(userData) {
-        setUserAvatar(userData.avatar)
-        setUserName(userData.name)
-        setUserInfo(userData.about)
-    }
+    // // устанавливает данные пользователя
+    // function setUserData(userData) {
+    //     setUserAvatar(userData.avatar)
+    //     setUserName(userData.name)
+    //     setUserInfo(userData.about)
+    // }
 
     // открывают попапы
     function handleEditAvatarClick() {
@@ -81,28 +79,29 @@ function App() {
     //             console.log(err)
     //         })
     // }, [])
-    // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
-    useEffect(() => {
-        Promise.all([api.getItems('users/me'), api.getItems('cards')])
-            .then((values) => {
-                const [userData, serverCards] = values
-                setCurrentUserId(userData._id)
-                // отображает данные пользователья в профиле
-                setUserData(userData)
+    // // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
+    // useEffect(() => {
+    //     Promise.all([api.getItems('users/me'), api.getItems('cards')])
+    //         .then((values) => {
+    //             const [userData, serverCards] = values
+    //             setCurrentUserId(userData._id)
+    //             // отображает данные пользователья в профиле
+    //             setUserData(userData)
 
-                const items = serverCards.map((item) => ({
-                    name: item.name,
-                    link: item.link,
-                    _id: item._id,
-                    likes: item.likes,
-                    owner: item.owner,
-                }))
-                setCards(items)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
+    //             const items = serverCards.map((item) => ({
+    //                 // key: item._id,
+    //                 name: item.name,
+    //                 link: item.link,
+    //                 _id: item._id,
+    //                 likes: item.likes,
+    //                 owner: item.owner,
+    //             }))
+    //             setCards(items)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err)
+    //         })
+    // }, [])
 
     // при монтировании компонента будет совершать запрос в API за карточками мест
     // useEffect(() => {
@@ -132,11 +131,7 @@ function App() {
                             onEditProfile={handleEditProfileClick}
                             onAddPlace={handleAddPlaceClick}
                             onEditAvatar={handleEditAvatarClick}
-                            userAvatar={userAvatar}
-                            userName={userName}
-                            userDescription={userDescription}
-                            cards={cards}
-                            currentUserId={currentUserId}
+                            // cardsList={cards}
                             handleCardClick={handleCardClick}
                         />
                         <Footer />
