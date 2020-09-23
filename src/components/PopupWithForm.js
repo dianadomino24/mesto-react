@@ -1,57 +1,50 @@
 import React from 'react'
 
-function PopupWithForm({
-    title,
-    name,
-    buttonText,
-    isOpen,
-    onClose,
-    children,
-    ...rest
-}) {
+function PopupWithForm(props
+) {
     //закрывает при нажатии esc
     function handleEscClose(evt) {
         if (evt.key === 'Escape') {
-            onClose()
+            props.onClose()
         }
     }
     //закрывает попап при нажатии на фон
     function closePopupByClickingOverlay(event) {
         if (event.target === event.currentTarget) {
-            onClose()
+            props.onClose()
         }
     }
 
-    if (isOpen) {
+    if (props.isOpen) {
         window.addEventListener('keydown', (evt) => handleEscClose(evt))
     }
 
     return (
         <section
-            className={`popup popup_type_${name} ${
-                isOpen ? 'popup_opened' : ''
+            className={`popup popup_type_${props.name} ${
+                props.isOpen ? 'popup_opened' : ''
             }`}
             onClick={closePopupByClickingOverlay}
         >
             <div className="popup__container">
                 <button
                     className="link popup__close-button"
-                    onClick={onClose}
+                    onClick={props.onClose}
                 />
                 <form
-                    className={`popup__form popup__form_type_${name}`}
+                    className={`popup__form popup__form_type_${props.name}`}
                     noValidate
-                    name={name}
+                    name={props.name}
                 >
-                    <h2 className="popup__title">{title}</h2>
+                    <h2 className="popup__title">{props.title}</h2>
                     <fieldset className="popup__fieldset">
-                        {children}
+                        {props.children}
                         <button
                             className="link popup__save-button"
                             autoFocus
                             type="submit"
                         >
-                            {buttonText}
+                            {props.buttonText}
                         </button>
                     </fieldset>
                 </form>

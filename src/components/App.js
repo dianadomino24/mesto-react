@@ -133,8 +133,7 @@ function App() {
                         buttonText="Сохранить"
                         isOpen={isEditProfilePopupOpen}
                         onClose={closeAllPopups}
-                        children={
-                            <>
+                        >
                                 <label className="popup__label">
                                     <input
                                         type="text"
@@ -161,9 +160,7 @@ function App() {
                                     />
                                     <span className="popup__input-error js-popup__input-error_type_profile"></span>
                                 </label>
-                            </>
-                        }
-                    />
+                        </PopupWithForm>
 
                     <PopupWithForm
                         title="Новое место"
@@ -171,8 +168,7 @@ function App() {
                         buttonText="Создать"
                         isOpen={isAddPlacePopupOpen}
                         onClose={closeAllPopups}
-                        children={
-                            <>
+                        >
                                 <label className="popup__label">
                                     <input
                                         type="text"
@@ -197,9 +193,7 @@ function App() {
                                     />
                                     <span className="popup__input-error"></span>
                                 </label>
-                            </>
-                        }
-                    />
+                    </PopupWithForm>
 
                     <PopupWithForm
                         title="Обновить аватар"
@@ -207,8 +201,7 @@ function App() {
                         buttonText="Сохранить"
                         isOpen={isEditAvatarPopupOpen}
                         onClose={closeAllPopups}
-                        children={
-                            <>
+                    >
                                 <label className="popup__label">
                                     <input
                                         type="url"
@@ -220,9 +213,8 @@ function App() {
                                     />
                                     <span className="popup__input-error"></span>
                                 </label>
-                            </>
-                        }
-                    />
+
+                        </PopupWithForm>
 
                     <PopupWithForm
                         title="Вы уверены?"
@@ -230,8 +222,10 @@ function App() {
                         buttonText="Да"
                         isOpen={false}
                         onClose={closeAllPopups}
-                        children={<></>}
-                    />
+                    >
+
+                    </PopupWithForm>
+                
 
                     <ImagePopup card={selectedCard} onClose={closeAllPopups} />
                 </div>
