@@ -15,7 +15,7 @@ export default function Card(props) {
                             ? 'link place__delete-button'
                             : 'link place__delete-button place__delete-button_disabled'
                     }
-                ></button>
+                />
                 <img
                     src={props.link}
                     alt={props.name}

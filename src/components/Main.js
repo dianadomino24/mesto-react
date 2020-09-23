@@ -34,14 +34,14 @@ function Main({
                         <button
                             className="link profile__edit-button"
                             onClick={onEditProfile}
-                        ></button>
+                        />
                     </div>
                     <p className="profile__job">{userDescription}</p>
                 </div>
                 <button
                     className="link profile__add-button"
                     onClick={onAddPlace}
-                ></button>
+                />
             </section>
             <section className="places section">
                 <ul className="places__list">

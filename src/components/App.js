@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import api from '../utils/Api'
+import api from '../utils/api'
 // import Card from './Card'
 import Header from './Header'
 import Main from './Main'
@@ -58,35 +58,57 @@ function App() {
     }
 
     // при монтировании компонента будет совершать запрос в API за пользовательскими данными
+    // useEffect(() => {
+    //     api.getItems('users/me')
+    //         .then((userData) => {
+    //             setCurrentUserId(userData._id)
+    //             // отображает данные пользователья в профиле
+    //             setUserData(userData)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err)
+    //         })
+    // }, [])
+    // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
     useEffect(() => {
-        api.getItems('users/me')
-            .then((userData) => {
-                setCurrentUserId(userData._id)
-                // отображает данные пользователья в профиле
-                setUserData(userData)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
+    Promise.all([api.getItems('users/me'), api.getItems('cards')])
+    .then((values) => {
+        const [userData, serverCards] = values;
+        setCurrentUserId(userData._id);
+        // отображает данные пользователья в профиле
+        setUserData(userData)
+
+        const items = serverCards.map((item) => ({
+            name: item.name,
+            link: item.link,
+            _id: item._id,
+            likes: item.likes,
+            owner: item.owner,
+        }))
+        setCards(items)
+        })
+    .catch((err) => {
+        console.log(err)
+    })
+}, [])
 
     // при монтировании компонента будет совершать запрос в API за карточками мест
-    useEffect(() => {
-        api.getItems('cards')
-            .then((serverCards) => {
-                const items = serverCards.map((item) => ({
-                    name: item.name,
-                    link: item.link,
-                    _id: item._id,
-                    likes: item.likes,
-                    owner: item.owner,
-                }))
-                setCards(items)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
+    // useEffect(() => {
+    //     api.getItems('cards')
+    //         .then((serverCards) => {
+    //             const items = serverCards.map((item) => ({
+    //                 name: item.name,
+    //                 link: item.link,
+    //                 _id: item._id,
+    //                 likes: item.likes,
+    //                 owner: item.owner,
+    //             }))
+    //             setCards(items)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err)
+    //         })
+    // }, [])
 
     return (
         <div className="App">

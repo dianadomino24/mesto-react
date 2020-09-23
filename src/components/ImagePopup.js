@@ -26,7 +26,7 @@ function ImagePopup(props) {
                     <button
                         className="link popup__close-button"
                         onClick={props.onClose}
-                    ></button>
+                    />
                     <figure className="picture-zoom">
                         <img
                             src={props.card.link}

@@ -37,7 +37,7 @@ function PopupWithForm({
                 <button
                     className="link popup__close-button"
                     onClick={onClose}
-                ></button>
+                />
                 <form
                     className={`popup__form popup__form_type_${name}`}
                     noValidate
