@@ -71,26 +71,26 @@ function App() {
     // }, [])
     // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
     useEffect(() => {
-    Promise.all([api.getItems('users/me'), api.getItems('cards')])
-    .then((values) => {
-        const [userData, serverCards] = values;
-        setCurrentUserId(userData._id);
-        // отображает данные пользователья в профиле
-        setUserData(userData)
+        Promise.all([api.getItems('users/me'), api.getItems('cards')])
+            .then((values) => {
+                const [userData, serverCards] = values
+                setCurrentUserId(userData._id)
+                // отображает данные пользователья в профиле
+                setUserData(userData)
 
-        const items = serverCards.map((item) => ({
-            name: item.name,
-            link: item.link,
-            _id: item._id,
-            likes: item.likes,
-            owner: item.owner,
-        }))
-        setCards(items)
-        })
-    .catch((err) => {
-        console.log(err)
-    })
-}, [])
+                const items = serverCards.map((item) => ({
+                    name: item.name,
+                    link: item.link,
+                    _id: item._id,
+                    likes: item.likes,
+                    owner: item.owner,
+                }))
+                setCards(items)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
 
     // при монтировании компонента будет совершать запрос в API за карточками мест
     // useEffect(() => {
@@ -133,34 +133,34 @@ function App() {
                         buttonText="Сохранить"
                         isOpen={isEditProfilePopupOpen}
                         onClose={closeAllPopups}
-                        >
-                                <label className="popup__label">
-                                    <input
-                                        type="text"
-                                        name="profile-name"
-                                        placeholder="Имя"
-                                        id="profile-name"
-                                        className="input popup__input popup__input_type_name"
-                                        required
-                                        minLength="2"
-                                        maxLength="40"
-                                    />
-                                    <span className="popup__input-error js-popup__input-error_type_profile"></span>
-                                </label>
-                                <label className="popup__label">
-                                    <input
-                                        type="text"
-                                        name="profile-job"
-                                        id="profile-job"
-                                        placeholder="Род деятельности"
-                                        className="input popup__input popup__input_type_job"
-                                        required
-                                        minLength="2"
-                                        maxLength="200"
-                                    />
-                                    <span className="popup__input-error js-popup__input-error_type_profile"></span>
-                                </label>
-                        </PopupWithForm>
+                    >
+                        <label className="popup__label">
+                            <input
+                                type="text"
+                                name="profile-name"
+                                placeholder="Имя"
+                                id="profile-name"
+                                className="input popup__input popup__input_type_name"
+                                required
+                                minLength="2"
+                                maxLength="40"
+                            />
+                            <span className="popup__input-error js-popup__input-error_type_profile"></span>
+                        </label>
+                        <label className="popup__label">
+                            <input
+                                type="text"
+                                name="profile-job"
+                                id="profile-job"
+                                placeholder="Род деятельности"
+                                className="input popup__input popup__input_type_job"
+                                required
+                                minLength="2"
+                                maxLength="200"
+                            />
+                            <span className="popup__input-error js-popup__input-error_type_profile"></span>
+                        </label>
+                    </PopupWithForm>
 
                     <PopupWithForm
                         title="Новое место"
@@ -168,31 +168,31 @@ function App() {
                         buttonText="Создать"
                         isOpen={isAddPlacePopupOpen}
                         onClose={closeAllPopups}
-                        >
-                                <label className="popup__label">
-                                    <input
-                                        type="text"
-                                        name="place-name"
-                                        placeholder="Название"
-                                        id="place-name"
-                                        className="input popup__input popup__input_type_place-name"
-                                        required
-                                        minLength="2"
-                                        maxLength="30"
-                                    />
-                                    <span className="popup__input-error"></span>
-                                </label>
-                                <label className="popup__label">
-                                    <input
-                                        type="url"
-                                        name="place-pic"
-                                        id="place-pic"
-                                        placeholder="Ссылка на картинку"
-                                        className="input popup__input popup__input_type_place-pic"
-                                        required
-                                    />
-                                    <span className="popup__input-error"></span>
-                                </label>
+                    >
+                        <label className="popup__label">
+                            <input
+                                type="text"
+                                name="place-name"
+                                placeholder="Название"
+                                id="place-name"
+                                className="input popup__input popup__input_type_place-name"
+                                required
+                                minLength="2"
+                                maxLength="30"
+                            />
+                            <span className="popup__input-error"></span>
+                        </label>
+                        <label className="popup__label">
+                            <input
+                                type="url"
+                                name="place-pic"
+                                id="place-pic"
+                                placeholder="Ссылка на картинку"
+                                className="input popup__input popup__input_type_place-pic"
+                                required
+                            />
+                            <span className="popup__input-error"></span>
+                        </label>
                     </PopupWithForm>
 
                     <PopupWithForm
@@ -202,19 +202,18 @@ function App() {
                         isOpen={isEditAvatarPopupOpen}
                         onClose={closeAllPopups}
                     >
-                                <label className="popup__label">
-                                    <input
-                                        type="url"
-                                        name="avatar"
-                                        id="avatar"
-                                        placeholder="Ссылка на картинку"
-                                        className="input popup__input popup__input_type_avatar"
-                                        required
-                                    />
-                                    <span className="popup__input-error"></span>
-                                </label>
-
-                        </PopupWithForm>
+                        <label className="popup__label">
+                            <input
+                                type="url"
+                                name="avatar"
+                                id="avatar"
+                                placeholder="Ссылка на картинку"
+                                className="input popup__input popup__input_type_avatar"
+                                required
+                            />
+                            <span className="popup__input-error"></span>
+                        </label>
+                    </PopupWithForm>
 
                     <PopupWithForm
                         title="Вы уверены?"
@@ -222,10 +221,7 @@ function App() {
                         buttonText="Да"
                         isOpen={false}
                         onClose={closeAllPopups}
-                    >
-
-                    </PopupWithForm>
-                
+                    ></PopupWithForm>
 
                     <ImagePopup card={selectedCard} onClose={closeAllPopups} />
                 </div>

@@ -1,7 +1,6 @@
 import React from 'react'
 
-function PopupWithForm(props
-) {
+function PopupWithForm(props) {
     //закрывает при нажатии esc
     function handleEscClose(evt) {
         if (evt.key === 'Escape') {
