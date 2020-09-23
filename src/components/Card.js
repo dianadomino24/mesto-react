@@ -1,9 +1,22 @@
 import React from 'react'
+import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 export default function Card(props) {
     function handleClick() {
         props.onCardClick(props.card)
     }
+
+    const currentUserData = React.useContext(CurrentUserContext)
+    // Определяем, являемся ли мы владельцем текущей карточки
+    const isOwn = props.owner._id === currentUserData._id
+
+    // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+    const isLiked = props.likes.some((i) => i._id === currentUserData._id)
+
+    // Создаём переменную, которую после зададим в `className` для кнопки лайка
+    const cardLikeButtonClassName = isLiked
+        ? 'place__like-button place__like-button_active'
+        : 'place__like-button'
 
     return (
         <li className="places__item">
@@ -11,7 +24,7 @@ export default function Card(props) {
                 {/* проверит, моя ли карточка и отключит кнопку удаления у чужих */}
                 <button
                     className={
-                        props.owner._id === props.currentUserId
+                        isOwn
                             ? 'link place__delete-button'
                             : 'link place__delete-button place__delete-button_disabled'
                     }
@@ -26,13 +39,7 @@ export default function Card(props) {
                     <h2 className="place__name">{props.name} </h2>
                     <button className="place__like-button-container">
                         {/* проверит, залайкана ли мной ранее карточка*/}
-                        <div
-                            className={
-                                props.owner._id === props.currentUserId
-                                    ? 'place__like-button place__like-button_active'
-                                    : 'place__like-button'
-                            }
-                        ></div>
+                        <div className={cardLikeButtonClassName}></div>
                         <div className="place__like-counter">
                             {props.likes.length}
                         </div>

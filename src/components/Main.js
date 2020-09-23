@@ -1,5 +1,6 @@
 import React from 'react'
 import Card from './Card'
+import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 function Main({
     onEditProfile,
@@ -13,6 +14,8 @@ function Main({
     handleCardClick,
     ...rest
 }) {
+    const currentUserData = React.useContext(CurrentUserContext)
+    // console.log(currentUserData)
     // // для проверки, есть ли в списке картинки, если нет, то делает видимой надпись о пустом списке
     // //в placesList всегда есть минимум 1 элемент - надпись о пустом списке
     // function check() {
@@ -20,45 +23,52 @@ function Main({
     //     return (placesList.children.length === 1? "places__empty-list places__empty-list_visible" : "places__empty-list")
     // }
 
-    return (
-        <main className="content page__content section">
-            <section className="profile section">
-                <div
-                    className="profile__image"
-                    onClick={onEditAvatar}
-                    style={{ backgroundImage: `url(${userAvatar})` }}
-                ></div>
-                <div className="profile__info">
-                    <div className="profile__name-wrap">
-                        <h1 className="profile__name">{userName}</h1>
-                        <button
-                            className="link profile__edit-button"
-                            onClick={onEditProfile}
-                        />
+    // без этого условия выдает ошибку (пытается отрисовать Main до получения данных с сервера)
+    if (currentUserData) {
+        return (
+            <main className="content page__content section">
+                <section className="profile section">
+                    <div
+                        className="profile__image"
+                        onClick={onEditAvatar}
+                        style={{
+                            backgroundImage: `url(${currentUserData.avatar})`,
+                        }}
+                    ></div>
+                    <div className="profile__info">
+                        <div className="profile__name-wrap">
+                            <h1 className="profile__name">{userName}</h1>
+                            <button
+                                className="link profile__edit-button"
+                                onClick={onEditProfile}
+                            />
+                        </div>
+                        <p className="profile__job">{userDescription}</p>
                     </div>
-                    <p className="profile__job">{userDescription}</p>
-                </div>
-                <button
-                    className="link profile__add-button"
-                    onClick={onAddPlace}
-                />
-            </section>
-            <section className="places section">
-                <ul className="places__list">
-                    <li className="places__empty-list">Нет добавленных мест</li>
-                    {cards.map((card) => (
-                        <Card
-                            key={card._id}
-                            currentUserId={currentUserId}
-                            onCardClick={handleCardClick}
-                            card={card}
-                            {...card}
-                        />
-                    ))}
-                </ul>
-            </section>
-        </main>
-    )
+                    <button
+                        className="link profile__add-button"
+                        onClick={onAddPlace}
+                    />
+                </section>
+                <section className="places section">
+                    <ul className="places__list">
+                        <li className="places__empty-list">
+                            Нет добавленных мест
+                        </li>
+                        {cards.map((card) => (
+                            <Card
+                                key={card._id}
+                                // currentUserId={currentUserId}
+                                onCardClick={handleCardClick}
+                                card={card}
+                                {...card}
+                            />
+                        ))}
+                    </ul>
+                </section>
+            </main>
+        )
+    } else return ''
 }
 
 export default Main
