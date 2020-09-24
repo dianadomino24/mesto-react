@@ -48,7 +48,6 @@ function Main({
             })
     }, [])
 
-    console.log(cards)
     // // для проверки, есть ли в списке картинки, если нет, то делает видимой надпись о пустом списке
     // //в placesList всегда есть минимум 1 элемент - надпись о пустом списке
     // function check() {
@@ -57,6 +56,7 @@ function Main({
     // }
 
     function handleCardLike(card) {
+        console.log(card)
         // Снова проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some((i) => i._id === currentUserData._id)
 
@@ -71,54 +71,49 @@ function Main({
         })
     }
 
-    // без этого условия выдает ошибку (пытается отрисовать Main до получения данных с сервера)
-    if (currentUserData) {
-        console.log(cards)
-        return (
-            <main className="content page__content section">
-                <section className="profile section">
-                    <div
-                        className="profile__image"
-                        onClick={onEditAvatar}
-                        style={{
-                            backgroundImage: `url(${currentUserData.avatar})`,
-                        }}
-                    ></div>
-                    <div className="profile__info">
-                        <div className="profile__name-wrap">
-                            <h1 className="profile__name">
-                                {currentUserData.name}
-                            </h1>
-                            <button
-                                className="link profile__edit-button"
-                                onClick={onEditProfile}
-                            />
-                        </div>
-                        <p className="profile__job">{currentUserData.about}</p>
+    return (
+        <main className="content page__content section">
+            <section className="profile section">
+                <div
+                    className="profile__image"
+                    onClick={onEditAvatar}
+                    style={{
+                        backgroundImage: `url(${currentUserData.avatar})`,
+                    }}
+                ></div>
+                <div className="profile__info">
+                    <div className="profile__name-wrap">
+                        <h1 className="profile__name">
+                            {currentUserData.name}
+                        </h1>
+                        <button
+                            className="link profile__edit-button"
+                            onClick={onEditProfile}
+                        />
                     </div>
-                    <button
-                        className="link profile__add-button"
-                        onClick={onAddPlace}
-                    />
-                </section>
-                <section className="places section">
-                    <ul className="places__list">
-                        <li className="places__empty-list">
-                            Нет добавленных мест
-                        </li>
-                        {cards.map((card) => (
-                            <Card
-                                key={card._id}
-                                onCardClick={handleCardClick}
-                                card={card}
-                                {...card}
-                            />
-                        ))}
-                    </ul>
-                </section>
-            </main>
-        )
-    } else return ''
+                    <p className="profile__job">{currentUserData.about}</p>
+                </div>
+                <button
+                    className="link profile__add-button"
+                    onClick={onAddPlace}
+                />
+            </section>
+            <section className="places section">
+                <ul className="places__list">
+                    <li className="places__empty-list">Нет добавленных мест</li>
+                    {cards.map((card) => (
+                        <Card
+                            key={card._id}
+                            onCardClick={handleCardClick}
+                            card={card}
+                            onCardLike={handleCardLike}
+                            {...card}
+                        />
+                    ))}
+                </ul>
+            </section>
+        </main>
+    )
 }
 
 export default Main

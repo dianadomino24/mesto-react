@@ -5,8 +5,11 @@ export default function Card(props) {
     function handleClick() {
         props.onCardClick(props.card)
     }
-
+    function handleLike() {
+        props.onCardLike(props.card)
+    }
     const currentUserData = React.useContext(CurrentUserContext)
+
     // Определяем, являемся ли мы владельцем текущей карточки
     const isOwn = props.owner._id === currentUserData._id
 
@@ -39,7 +42,10 @@ export default function Card(props) {
                     <h2 className="place__name">{props.name} </h2>
                     <button className="place__like-button-container">
                         {/* проверит, залайкана ли мной ранее карточка*/}
-                        <div className={cardLikeButtonClassName}></div>
+                        <div
+                            className={cardLikeButtonClassName}
+                            onClick={handleLike}
+                        ></div>
                         <div className="place__like-counter">
                             {props.likes.length}
                         </div>

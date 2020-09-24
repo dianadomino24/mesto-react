@@ -13,8 +13,13 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
 
-    // Данные текущего пользователя будут использованы как контекст
-    const [currentUser, setCurrentUser] = useState()
+    // Данные текущего пользователя будут использованы как контекст (пока не пришли даннные с сервера покажет Жака)
+    const [currentUser, setCurrentUser] = useState({
+        name: 'Жак Ив Кусто',
+        about: 'Мореплаватель',
+        avatar:
+            'https://kaskad.tv/images/2020/foto_zhak_iv_kusto__-_interesnie_fakti_20190810_2078596433.jpg',
+    })
 
     // // данные пользователя
     // const [userAvatar, setUserAvatar] = useState()
