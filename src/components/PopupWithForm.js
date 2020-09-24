@@ -19,6 +19,10 @@ function PopupWithForm(props) {
         document.querySelector(`.popup__form_type_${props.name}`).reset()
         props.onClose()
     }
+    function handleSubmit(e) {
+        props.onSubmit(e)
+        document.querySelector(`.popup__form_type_${props.name}`).reset()
+    }
 
     if (props.isOpen) {
         window.addEventListener('keydown', (evt) => handleEscClose(evt))
@@ -37,7 +41,7 @@ function PopupWithForm(props) {
                     className={`popup__form popup__form_type_${props.name}`}
                     noValidate
                     name={props.name}
-                    onSubmit={props.onSubmit}
+                    onSubmit={handleSubmit}
                 >
                     <h2 className="popup__title">{props.title}</h2>
                     <fieldset className="popup__fieldset">

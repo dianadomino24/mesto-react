@@ -15,6 +15,8 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
 
+    const [cards, setCards] = useState([])
+
     const profileAvatarSelector = '.profile__image'
     // Данные текущего пользователя будут использованы как контекст (пока не пришли даннные с сервера покажет Жака)
     const [currentUser, setCurrentUser] = useState({
@@ -76,6 +78,50 @@ function App() {
             })
     }, [])
 
+    // при монтировании компонента будет совершать запрос в API за карточками мест
+    useEffect(() => {
+        api.getItems('cards')
+            .then((serverCards) => {
+                const items = serverCards.map((item) => ({
+                    name: item.name,
+                    link: item.link,
+                    _id: item._id,
+                    likes: item.likes,
+                    owner: item.owner,
+                }))
+                setCards(items)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
+
+    function handleCardLike(card) {
+        // Снова проверяем, есть ли уже лайк на этой карточке
+        const isLiked = card.likes.some((i) => i._id === currentUser._id)
+
+        // Отправляем запрос в API и получаем обновлённые данные карточки
+        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+            // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
+            const newCards = cards.map((c) =>
+                c._id === card._id ? newCard : c
+            )
+            // Обновляем стейт
+            setCards(newCards)
+        })
+    }
+
+    function handleCardDelete(card, cardDOMElement) {
+        api.deleteItem('cards', card._id)
+            .then(() => {
+                //вызывает удаление карточки из разметки
+                cardDOMElement.remove()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     function handleUpdateUser(userData) {
         api.changeItem(
             {
@@ -95,7 +141,6 @@ function App() {
     }
 
     function handleUpdateAvatar(userData) {
-        console.log(userData)
         api.changeItem({ avatar: userData.avatar }, 'users/me/avatar')
             .then((res) => {
                 //установим новые данные профиля
@@ -176,8 +221,10 @@ function App() {
                             onEditProfile={handleEditProfileClick}
                             onAddPlace={handleAddPlaceClick}
                             onEditAvatar={handleEditAvatarClick}
-                            // cardsList={cards}
                             handleCardClick={handleCardClick}
+                            cards={cards}
+                            onCardLike={handleCardLike}
+                            onCardDelete={handleCardDelete}
                         />
                         <Footer />
                         <EditProfilePopup

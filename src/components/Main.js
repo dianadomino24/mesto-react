@@ -3,17 +3,8 @@ import Card from './Card'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import api from '../utils/api'
 
-function Main({
-    onEditProfile,
-    onAddPlace,
-    onEditAvatar,
-    // cardsList,
-    handleCardClick,
-    ...rest
-}) {
+function Main(props) {
     const currentUserData = React.useContext(CurrentUserContext)
-    const [cards, setCards] = useState([])
-
     // данные пользователя
     // const [userAvatar, setUserAvatar] = useState()
     // const [userName, setUserName] = useState('Жак Ив Кусто')
@@ -24,23 +15,7 @@ function Main({
     //     setUserName(userData.name)
     //     setUserInfo(userData.about)
     // }
-    // при монтировании компонента будет совершать запрос в API за карточками мест
-    useEffect(() => {
-        api.getItems('cards')
-            .then((serverCards) => {
-                const items = serverCards.map((item) => ({
-                    name: item.name,
-                    link: item.link,
-                    _id: item._id,
-                    likes: item.likes,
-                    owner: item.owner,
-                }))
-                setCards(items)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
+
     // // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
     // useEffect(() => {
     //     Promise.all([api.getItems('users/me'), api.getItems('cards')])
@@ -72,38 +47,12 @@ function Main({
     //     return (placesList.children.length === 1? "places__empty-list places__empty-list_visible" : "places__empty-list")
     // }
 
-    function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some((i) => i._id === currentUserData._id)
-
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-            // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-            const newCards = cards.map((c) =>
-                c._id === card._id ? newCard : c
-            )
-            // Обновляем стейт
-            setCards(newCards)
-        })
-    }
-
-    function handleCardDelete(card, cardDOMElement) {
-        api.deleteItem('cards', card._id)
-            .then(() => {
-                //вызывает удаление карточки из разметки
-                cardDOMElement.remove()
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
     return (
         <main className="content page__content section">
             <section className="profile section">
                 <div
                     className="profile__image"
-                    onClick={onEditAvatar}
+                    onClick={props.onEditAvatar}
                     style={{
                         backgroundImage: `url(${currentUserData.avatar})`,
                     }}
@@ -115,26 +64,26 @@ function Main({
                         </h1>
                         <button
                             className="link profile__edit-button"
-                            onClick={onEditProfile}
+                            onClick={props.onEditProfile}
                         />
                     </div>
                     <p className="profile__job">{currentUserData.about}</p>
                 </div>
                 <button
                     className="link profile__add-button"
-                    onClick={onAddPlace}
+                    onClick={props.onAddPlace}
                 />
             </section>
             <section className="places section">
                 <ul className="places__list">
                     <li className="places__empty-list">Нет добавленных мест</li>
-                    {cards.map((card) => (
+                    {props.cards.map((card) => (
                         <Card
                             key={card._id}
-                            onCardClick={handleCardClick}
+                            onCardClick={props.handleCardClick}
                             card={card}
-                            onCardLike={handleCardLike}
-                            onCardDelete={handleCardDelete}
+                            onCardLike={props.onCardLike}
+                            onCardDelete={props.onCardDelete}
                             {...card}
                         />
                     ))}
