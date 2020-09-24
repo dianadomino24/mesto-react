@@ -8,6 +8,11 @@ export default function Card(props) {
     function handleLike() {
         props.onCardLike(props.card)
     }
+    function handleDelete(evt) {
+        //сохраняет дом элемент, который надо будет удалить из разметки
+        const placeEvt = evt.target.closest('.places__item')
+        props.onCardDelete(props.card, placeEvt)
+    }
     const currentUserData = React.useContext(CurrentUserContext)
 
     // Определяем, являемся ли мы владельцем текущей карточки
@@ -31,6 +36,9 @@ export default function Card(props) {
                             ? 'link place__delete-button'
                             : 'link place__delete-button place__delete-button_disabled'
                     }
+                    onClick={(evt) => {
+                        handleDelete(evt)
+                    }}
                 />
                 <img
                     src={props.link}

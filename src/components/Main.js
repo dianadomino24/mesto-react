@@ -56,7 +56,6 @@ function Main({
     // }
 
     function handleCardLike(card) {
-        console.log(card)
         // Снова проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some((i) => i._id === currentUserData._id)
 
@@ -69,6 +68,17 @@ function Main({
             // Обновляем стейт
             setCards(newCards)
         })
+    }
+
+    function handleCardDelete(card, cardDOMElement) {
+        api.deleteItem('cards', card._id)
+            .then(() => {
+                //вызывает удаление карточки из разметки
+                cardDOMElement.remove()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     return (
@@ -107,6 +117,7 @@ function Main({
                             onCardClick={handleCardClick}
                             card={card}
                             onCardLike={handleCardLike}
+                            onCardDelete={handleCardDelete}
                             {...card}
                         />
                     ))}
