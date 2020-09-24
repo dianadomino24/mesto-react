@@ -8,19 +8,21 @@ function EditProfilePopup(props) {
     // для заполнения инпутов текущими данными пользователя
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
+
     // После загрузки текущего пользователя из API
     // его данные будут использованы в управляемых компонентах.
     useEffect(() => {
         setName(currentUser.name)
         setDescription(currentUser.about)
     }, [currentUser])
-
+    // при введении текста в инпут будет обновлять стейт
     function handleNameChange(e) {
         setName(e.target.value)
     }
     function handleDescribChange(e) {
         setDescription(e.target.value)
     }
+
     function handleClose() {
         // если изменены инпуты, но не засабмичены, то не станет сохранять их values ????????????????????????
         setName(currentUser.name)

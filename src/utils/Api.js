@@ -49,31 +49,6 @@ class Api {
         }
     }
 
-    // changeLikeCardStatus(id, notLiked, title) {
-    //     if (notLiked) {
-    //         return fetch(this.baseUrl.concat(title).concat(`/${id}`), {
-    //             method: 'PUT',
-    //             headers: this.headers,
-    //             // body: JSON.stringify(item)
-    //         }).then((res) => {
-    //             if (res.ok) {
-    //                 return res.json()
-    //             }
-    //             return Promise.reject(`Ошибка: ${res.status}`)
-    //         })
-    //     } else {
-    //         return fetch(this.baseUrl.concat(title).concat(`/${id}`), {
-    //             method: 'DELETE',
-    //             headers: this.headers,
-    //         }).then((res) => {
-    //             if (res.ok) {
-    //                 return res.json()
-    //             }
-    //             return Promise.reject(`Ошибка: ${res.status}`)
-    //         })
-    //     }
-    // }
-
     replaceItem(title, id) {
         return fetch(this.baseUrl.concat(title).concat(`/${id}`), {
             method: 'PUT',

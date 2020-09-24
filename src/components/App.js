@@ -8,6 +8,7 @@ import ImagePopup from './ImagePopup'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
+import AddPlacePopup from './AddPlacePopup'
 
 function App() {
     //состояние попапов
@@ -25,24 +26,8 @@ function App() {
         avatar:
             'https://kaskad.tv/images/2020/foto_zhak_iv_kusto__-_interesnie_fakti_20190810_2078596433.jpg',
     })
-
-    // // данные пользователя
-    // const [userAvatar, setUserAvatar] = useState()
-    // const [userName, setUserName] = useState('Жак Ив Кусто')
-    // const [userDescription, setUserInfo] = useState('Мореплаватель')
-
-    // // массив карточек мест
-    // const [cards, setCards] = useState([])
-
     // для попапа с полноразмерной картинкой
     const [selectedCard, setSelectedCard] = useState()
-
-    // // устанавливает данные пользователя
-    // function setUserData(userData) {
-    //     setUserAvatar(userData.avatar)
-    //     setUserName(userData.name)
-    //     setUserInfo(userData.about)
-    // }
 
     // открывают попапы
     function handleEditAvatarClick() {
@@ -68,20 +53,15 @@ function App() {
         setSelectedCard()
     }
 
+    // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
     useEffect(() => {
-        api.getItems('users/me')
-            .then((userData) => {
+        Promise.all([api.getItems('users/me'), api.getItems('cards')])
+            .then((values) => {
+                const [userData, serverCards] = values
+                // отображает данные пользователья в профиле
                 setCurrentUser(userData)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
 
-    // при монтировании компонента будет совершать запрос в API за карточками мест
-    useEffect(() => {
-        api.getItems('cards')
-            .then((serverCards) => {
+                // отоьразит карточки с сервера
                 const items = serverCards.map((item) => ({
                     name: item.name,
                     link: item.link,
@@ -97,7 +77,7 @@ function App() {
     }, [])
 
     function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
+        // проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some((i) => i._id === currentUser._id)
 
         // Отправляем запрос в API и получаем обновлённые данные карточки
@@ -110,7 +90,7 @@ function App() {
             setCards(newCards)
         })
     }
-
+    // удаляет карточку
     function handleCardDelete(card, cardDOMElement) {
         api.deleteItem('cards', card._id)
             .then(() => {
@@ -121,7 +101,7 @@ function App() {
                 console.log(err)
             })
     }
-
+    // обновляет профиль
     function handleUpdateUser(userData) {
         api.changeItem(
             {
@@ -131,8 +111,10 @@ function App() {
             'users/me'
         )
             .then((res) => {
-                //установим новые данные профиля
+                //установим новые данные профиля в разметке
                 setCurrentUser(res)
+            })
+            .then(() => {
                 closeAllPopups()
             })
             .catch((err) => {
@@ -157,59 +139,20 @@ function App() {
                 console.log(err)
             })
     }
-    // при монтировании компонента будет совершать запрос в API за пользовательскими данными
-    // useEffect(() => {
-    //     api.getItems('users/me')
-    //         .then((userData) => {
-    //             setCurrentUserId(userData._id)
-    //             // отображает данные пользователья в профиле
-    //             setUserData(userData)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //         })
-    // }, [])
-    // // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
-    // useEffect(() => {
-    //     Promise.all([api.getItems('users/me'), api.getItems('cards')])
-    //         .then((values) => {
-    //             const [userData, serverCards] = values
-    //             setCurrentUserId(userData._id)
-    //             // отображает данные пользователья в профиле
-    //             setUserData(userData)
-
-    //             const items = serverCards.map((item) => ({
-    //                 // key: item._id,
-    //                 name: item.name,
-    //                 link: item.link,
-    //                 _id: item._id,
-    //                 likes: item.likes,
-    //                 owner: item.owner,
-    //             }))
-    //             setCards(items)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //         })
-    // }, [])
-
-    // при монтировании компонента будет совершать запрос в API за карточками мест
-    // useEffect(() => {
-    //     api.getItems('cards')
-    //         .then((serverCards) => {
-    //             const items = serverCards.map((item) => ({
-    //                 name: item.name,
-    //                 link: item.link,
-    //                 _id: item._id,
-    //                 likes: item.likes,
-    //                 owner: item.owner,
-    //             }))
-    //             setCards(items)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //         })
-    // }, [])
+    // добавит новую карточку места
+    function handleAddPlaceSubmit(newCard) {
+        api.createItem(newCard, 'cards')
+            // создаст ее в разметке
+            .then((newCard) => {
+                setCards([newCard, ...cards])
+            })
+            .then(() => {
+                closeAllPopups()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
 
     return (
         <div className="App">
@@ -233,39 +176,11 @@ function App() {
                             onUpdateUser={handleUpdateUser}
                         />
 
-                        <PopupWithForm
-                            title="Новое место"
-                            name="add-place"
-                            buttonText="Создать"
+                        <AddPlacePopup
                             isOpen={isAddPlacePopupOpen}
                             onClose={closeAllPopups}
-                            // onSubmit={}
-                        >
-                            <label className="popup__label">
-                                <input
-                                    type="text"
-                                    name="place-name"
-                                    placeholder="Название"
-                                    id="place-name"
-                                    className="input popup__input popup__input_type_place-name"
-                                    required
-                                    minLength="2"
-                                    maxLength="30"
-                                />
-                                <span className="popup__input-error"></span>
-                            </label>
-                            <label className="popup__label">
-                                <input
-                                    type="url"
-                                    name="place-pic"
-                                    id="place-pic"
-                                    placeholder="Ссылка на картинку"
-                                    className="input popup__input popup__input_type_place-pic"
-                                    required
-                                />
-                                <span className="popup__input-error"></span>
-                            </label>
-                        </PopupWithForm>
+                            onAddPlace={handleAddPlaceSubmit}
+                        />
 
                         <EditAvatarPopup
                             isOpen={isEditAvatarPopupOpen}
@@ -293,3 +208,31 @@ function App() {
 }
 
 export default App
+
+// // при монтировании компонента будет совершать запрос в API за карточками мест
+// useEffect(() => {
+//     api.getItems('cards')
+//         .then((serverCards) => {
+//             const items = serverCards.map((item) => ({
+//                 name: item.name,
+//                 link: item.link,
+//                 _id: item._id,
+//                 likes: item.likes,
+//                 owner: item.owner,
+//             }))
+//             setCards(items)
+//         })
+//         .catch((err) => {
+//             console.log(err)
+//         })
+// }, [])
+
+// useEffect(() => {
+//     api.getItems('users/me')
+//         .then((userData) => {
+//             setCurrentUser(userData)
+//         })
+//         .catch((err) => {
+//             console.log(err)
+//         })
+// }, [])

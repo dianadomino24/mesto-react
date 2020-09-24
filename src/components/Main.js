@@ -1,51 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Card from './Card'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
-import api from '../utils/api'
 
 function Main(props) {
     const currentUserData = React.useContext(CurrentUserContext)
-    // данные пользователя
-    // const [userAvatar, setUserAvatar] = useState()
-    // const [userName, setUserName] = useState('Жак Ив Кусто')
-    // const [userDescription, setUserInfo] = useState('Мореплаватель')
-    // // устанавливает данные пользователя
-    // function setUserData(userData) {
-    //     setUserAvatar(userData.avatar)
-    //     setUserName(userData.name)
-    //     setUserInfo(userData.about)
-    // }
-
-    // // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
-    // useEffect(() => {
-    //     Promise.all([api.getItems('users/me'), api.getItems('cards')])
-    //         .then((values) => {
-    //             const [userData, serverCards] = values
-    //             // setCurrentUserId(userData._id)
-    //             // отображает данные пользователья в профиле
-    //             // setUserData(userData)
-
-    //             const items = serverCards.map((item) => ({
-    //                 // key: item._id,
-    //                 name: item.name,
-    //                 link: item.link,
-    //                 _id: item._id,
-    //                 likes: item.likes,
-    //                 owner: item.owner,
-    //             }))
-    //             setCards(items)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //         })
-    // }, [])
-
-    // // для проверки, есть ли в списке картинки, если нет, то делает видимой надпись о пустом списке
-    // //в placesList всегда есть минимум 1 элемент - надпись о пустом списке
-    // function check() {
-    //     const placesList = document.querySelector('.places__list')
-    //     return (placesList.children.length === 1? "places__empty-list places__empty-list_visible" : "places__empty-list")
-    // }
 
     return (
         <main className="content page__content section">
@@ -94,3 +52,10 @@ function Main(props) {
 }
 
 export default Main
+
+// // для проверки, есть ли в списке картинки, если нет, то делает видимой надпись о пустом списке
+// //в placesList всегда есть минимум 1 элемент - надпись о пустом списке
+// function check() {
+//     const placesList = document.querySelector('.places__list')
+//     return (placesList.children.length === 1? "places__empty-list places__empty-list_visible" : "places__empty-list")
+// }

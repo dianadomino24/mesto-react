@@ -4,6 +4,7 @@ function PopupWithForm(props) {
     //закрывает при нажатии esc
     function handleEscClose(evt) {
         if (evt.key === 'Escape') {
+            // очистит форму от введенного в инпут текста
             document.querySelector(`.popup__form_type_${props.name}`).reset()
             props.onClose()
         }
