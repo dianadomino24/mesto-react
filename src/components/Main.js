@@ -24,17 +24,11 @@ function Main({
     //     setUserName(userData.name)
     //     setUserInfo(userData.about)
     // }
-    // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
+    // при монтировании компонента будет совершать запрос в API за карточками мест
     useEffect(() => {
-        Promise.all([api.getItems('users/me'), api.getItems('cards')])
-            .then((values) => {
-                const [userData, serverCards] = values
-                // setCurrentUserId(userData._id)
-                // отображает данные пользователья в профиле
-                // setUserData(userData)
-
+        api.getItems('cards')
+            .then((serverCards) => {
                 const items = serverCards.map((item) => ({
-                    // key: item._id,
                     name: item.name,
                     link: item.link,
                     _id: item._id,
@@ -47,6 +41,29 @@ function Main({
                 console.log(err)
             })
     }, [])
+    // // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
+    // useEffect(() => {
+    //     Promise.all([api.getItems('users/me'), api.getItems('cards')])
+    //         .then((values) => {
+    //             const [userData, serverCards] = values
+    //             // setCurrentUserId(userData._id)
+    //             // отображает данные пользователья в профиле
+    //             // setUserData(userData)
+
+    //             const items = serverCards.map((item) => ({
+    //                 // key: item._id,
+    //                 name: item.name,
+    //                 link: item.link,
+    //                 _id: item._id,
+    //                 likes: item.likes,
+    //                 owner: item.owner,
+    //             }))
+    //             setCards(items)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err)
+    //         })
+    // }, [])
 
     // // для проверки, есть ли в списке картинки, если нет, то делает видимой надпись о пустом списке
     // //в placesList всегда есть минимум 1 элемент - надпись о пустом списке

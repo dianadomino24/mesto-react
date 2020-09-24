@@ -6,6 +6,7 @@ import Footer from './Footer'
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
+import EditProfilePopup from './EditProfilePopup'
 
 function App() {
     //состояние попапов
@@ -72,6 +73,24 @@ function App() {
                 console.log(err)
             })
     }, [])
+
+    function handleUpdateUser(userData) {
+        api.changeItem(
+            {
+                name: userData.name.trim(),
+                about: userData.about.trim(),
+            },
+            'users/me'
+        )
+            .then((res) => {
+                //установим новые данные профиля (если введены values с пробелами, то обрежем лишние пробелы)
+                setCurrentUser(res)
+                closeAllPopups()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
     // при монтировании компонента будет совершать запрос в API за пользовательскими данными
     // useEffect(() => {
     //     api.getItems('users/me')
@@ -140,40 +159,11 @@ function App() {
                             handleCardClick={handleCardClick}
                         />
                         <Footer />
-                        <PopupWithForm
-                            title="Редактировать профиль"
-                            name="edit-profile"
-                            buttonText="Сохранить"
+                        <EditProfilePopup
                             isOpen={isEditProfilePopupOpen}
                             onClose={closeAllPopups}
-                        >
-                            <label className="popup__label">
-                                <input
-                                    type="text"
-                                    name="profile-name"
-                                    placeholder="Имя"
-                                    id="profile-name"
-                                    className="input popup__input popup__input_type_name"
-                                    required
-                                    minLength="2"
-                                    maxLength="40"
-                                />
-                                <span className="popup__input-error js-popup__input-error_type_profile"></span>
-                            </label>
-                            <label className="popup__label">
-                                <input
-                                    type="text"
-                                    name="profile-job"
-                                    id="profile-job"
-                                    placeholder="Род деятельности"
-                                    className="input popup__input popup__input_type_job"
-                                    required
-                                    minLength="2"
-                                    maxLength="200"
-                                />
-                                <span className="popup__input-error js-popup__input-error_type_profile"></span>
-                            </label>
-                        </PopupWithForm>
+                            onUpdateUser={handleUpdateUser}
+                        />
 
                         <PopupWithForm
                             title="Новое место"
@@ -181,6 +171,7 @@ function App() {
                             buttonText="Создать"
                             isOpen={isAddPlacePopupOpen}
                             onClose={closeAllPopups}
+                            // onSubmit={}
                         >
                             <label className="popup__label">
                                 <input

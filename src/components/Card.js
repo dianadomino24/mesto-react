@@ -36,9 +36,7 @@ export default function Card(props) {
                             ? 'link place__delete-button'
                             : 'link place__delete-button place__delete-button_disabled'
                     }
-                    onClick={(evt) => {
-                        handleDelete(evt)
-                    }}
+                    onClick={handleDelete}
                 />
                 <img
                     src={props.link}
