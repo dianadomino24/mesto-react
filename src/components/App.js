@@ -7,6 +7,7 @@ import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
+import EditAvatarPopup from './EditAvatarPopup'
 
 function App() {
     //состояние попапов
@@ -14,6 +15,7 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
 
+    const profileAvatarSelector = '.profile__image'
     // Данные текущего пользователя будут использованы как контекст (пока не пришли даннные с сервера покажет Жака)
     const [currentUser, setCurrentUser] = useState({
         name: 'Жак Ив Кусто',
@@ -83,8 +85,27 @@ function App() {
             'users/me'
         )
             .then((res) => {
-                //установим новые данные профиля (если введены values с пробелами, то обрежем лишние пробелы)
+                //установим новые данные профиля
                 setCurrentUser(res)
+                closeAllPopups()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+    function handleUpdateAvatar(userData) {
+        console.log(userData)
+        api.changeItem({ avatar: userData.avatar }, 'users/me/avatar')
+            .then((res) => {
+                //установим новые данные профиля
+                setCurrentUser(res)
+                // установим новый аватар в разметке
+                document.querySelector(
+                    profileAvatarSelector
+                ).style.backgroundImage = `url('${res.avatar}')`
+            })
+            .then(() => {
                 closeAllPopups()
             })
             .catch((err) => {
@@ -199,25 +220,11 @@ function App() {
                             </label>
                         </PopupWithForm>
 
-                        <PopupWithForm
-                            title="Обновить аватар"
-                            name="edit-avatar"
-                            buttonText="Сохранить"
+                        <EditAvatarPopup
                             isOpen={isEditAvatarPopupOpen}
                             onClose={closeAllPopups}
-                        >
-                            <label className="popup__label">
-                                <input
-                                    type="url"
-                                    name="avatar"
-                                    id="avatar"
-                                    placeholder="Ссылка на картинку"
-                                    className="input popup__input popup__input_type_avatar"
-                                    required
-                                />
-                                <span className="popup__input-error"></span>
-                            </label>
-                        </PopupWithForm>
+                            onUpdateAvatar={handleUpdateAvatar}
+                        />
 
                         <PopupWithForm
                             title="Вы уверены?"

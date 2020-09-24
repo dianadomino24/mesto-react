@@ -4,15 +4,20 @@ function PopupWithForm(props) {
     //закрывает при нажатии esc
     function handleEscClose(evt) {
         if (evt.key === 'Escape') {
+            document.querySelector(`.popup__form_type_${props.name}`).reset()
             props.onClose()
         }
     }
     //закрывает попап при нажатии на фон
     function closePopupByClickingOverlay(event) {
         if (event.target === event.currentTarget) {
+            document.querySelector(`.popup__form_type_${props.name}`).reset()
             props.onClose()
         }
+    }
+    function close() {
         document.querySelector(`.popup__form_type_${props.name}`).reset()
+        props.onClose()
     }
 
     if (props.isOpen) {
@@ -27,10 +32,7 @@ function PopupWithForm(props) {
             onClick={closePopupByClickingOverlay}
         >
             <div className="popup__container">
-                <button
-                    className="link popup__close-button"
-                    onClick={props.onClose}
-                />
+                <button className="link popup__close-button" onClick={close} />
                 <form
                     className={`popup__form popup__form_type_${props.name}`}
                     noValidate
