@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useState, useRef } from 'react'
 import PopupWithForm from './PopupWithForm'
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 function EditAvatarPopup(props) {
-    const currentUser = useContext(CurrentUserContext)
     const avatarInput = useRef({})
     const [avatar, setAvatar] = useState('')
 

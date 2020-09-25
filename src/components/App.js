@@ -80,6 +80,19 @@ function App() {
             })
     }, [])
 
+    // варианты замены текста кнопок при ожидании загрузки
+    const loadingText = 'Сохранение...'
+    const defaultSaveText = 'Сохранить'
+    const defaultCreateText = 'Создать'
+    // const defaultYesText = 'Да'
+    // заменит текст кнопок при ожидании процесса загрузки данных на сервер
+    function renderLoading(isLoading, button, text) {
+        if (isLoading) {
+            button.textContent = loadingText
+        } else {
+            button.textContent = text
+        }
+    }
     function handleCardLike(card) {
         // проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some((i) => i._id === currentUser._id)
@@ -94,6 +107,7 @@ function App() {
             setCards(newCards)
         })
     }
+
     // удаляет карточку
     function handleCardDelete(card, cardDOMElement) {
         api.deleteItem('cards', card._id)
@@ -107,6 +121,12 @@ function App() {
     }
     // обновляет профиль
     function handleUpdateUser(userData) {
+        const profileSubmitButton = document.querySelector(
+            '.popup__save-button_type_edit-profile'
+        )
+        // ожидание загрузки
+        renderLoading(true, profileSubmitButton, defaultSaveText)
+
         api.changeItem(
             {
                 name: userData.name.trim(),
@@ -124,9 +144,18 @@ function App() {
             .catch((err) => {
                 console.log(err)
             })
+            .finally(() => {
+                renderLoading(false, profileSubmitButton, defaultSaveText)
+            })
     }
 
     function handleUpdateAvatar(userData) {
+        const avatarSubmitButton = document.querySelector(
+            '.popup__save-button_type_edit-avatar'
+        )
+        // до получения ответа от сервера покажет пользователю надпись о процессе загрузки
+        renderLoading(true, avatarSubmitButton, defaultSaveText)
+
         api.changeItem({ avatar: userData.avatar }, 'users/me/avatar')
             .then((res) => {
                 //установим новые данные профиля
@@ -142,9 +171,18 @@ function App() {
             .catch((err) => {
                 console.log(err)
             })
+            .finally(() => {
+                renderLoading(false, avatarSubmitButton, defaultSaveText)
+            })
     }
     // добавит новую карточку места
     function handleAddPlaceSubmit(newCard) {
+        const placeSubmitButton = document.querySelector(
+            '.popup__save-button_type_add-place'
+        )
+        // до получения ответа от сервера покажет пользователю надпись о процессе загрузки
+        renderLoading(true, placeSubmitButton, defaultCreateText)
+
         api.createItem(newCard, 'cards')
             // создаст ее в разметке
             .then((newCard) => {
@@ -155,6 +193,9 @@ function App() {
             })
             .catch((err) => {
                 console.log(err)
+            })
+            .finally(() => {
+                renderLoading(false, placeSubmitButton, defaultCreateText)
             })
     }
 

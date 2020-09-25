@@ -71,7 +71,7 @@ function PopupWithForm(props) {
                     <fieldset className="popup__fieldset">
                         {props.children}
                         <button
-                            className="link popup__save-button"
+                            className={`link popup__save-button popup__save-button_type_${props.name}`}
                             autoFocus
                             type="submit"
                         >
