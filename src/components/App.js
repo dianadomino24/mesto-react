@@ -9,6 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
+import { cleanInputErrors } from './FormValidator'
 
 function App() {
     //состояние попапов
@@ -47,6 +48,9 @@ function App() {
 
     // закрывает все попапы меняя их состояние
     function closeAllPopups() {
+        //убирает уведомления об ошибках от предыдущих инпутов
+        cleanInputErrors()
+
         setIsEditAvatarPopupOpen(false)
         setIsEditProfilePopupOpen(false)
         setIsAddPlacePopupOpen(false)

@@ -11,8 +11,6 @@ function EditAvatarPopup(props) {
         setAvatar(e.target.value)
     }
     function handleSubmit(e) {
-        e.preventDefault()
-
         props.onUpdateAvatar({
             avatar: avatarInput.current.value,
         })
@@ -26,6 +24,7 @@ function EditAvatarPopup(props) {
             isOpen={props.isOpen}
             onClose={props.onClose}
             onSubmit={handleSubmit}
+            // formSelector={}
         >
             <label className="popup__label">
                 <input

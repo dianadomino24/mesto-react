@@ -1,30 +1,50 @@
 import React from 'react'
+import { formSelectorsObj } from '../utils/utils'
+import { FormValidator } from './FormValidator'
 
 function PopupWithForm(props) {
+    function formValidate() {
+        if (props.isOpen) {
+            const currentForm = document.querySelector(
+                `.popup__form_type_${props.name}`
+            )
+            // будет валидировать форму
+            const formValidator = new FormValidator(
+                formSelectorsObj,
+                currentForm
+            )
+            formValidator.enableValidation()
+            return !formValidator.hasInvalidInput()
+        }
+    }
+    formValidate()
+
+    // очистит форму от введенного в инпут текста, ошибок валидации и закроет попап
+    function closeReset() {
+        document.querySelector(`.popup__form_type_${props.name}`).reset()
+        props.onClose()
+    }
     //закрывает при нажатии esc
     function handleEscClose(evt) {
         if (evt.key === 'Escape') {
-            // очистит форму от введенного в инпут текста
-            document.querySelector(`.popup__form_type_${props.name}`).reset()
-            props.onClose()
+            closeReset()
         }
     }
     //закрывает попап при нажатии на фон
     function closePopupByClickingOverlay(event) {
         if (event.target === event.currentTarget) {
-            document.querySelector(`.popup__form_type_${props.name}`).reset()
-            props.onClose()
+            closeReset()
         }
     }
-    function close() {
-        document.querySelector(`.popup__form_type_${props.name}`).reset()
-        props.onClose()
-    }
-    function handleSubmit(e) {
-        props.onSubmit(e)
-        document.querySelector(`.popup__form_type_${props.name}`).reset()
-    }
 
+    function handleSubmit(e) {
+        e.preventDefault()
+        if (formValidate()) {
+            props.onSubmit(e)
+            document.querySelector(`.popup__form_type_${props.name}`).reset()
+        }
+    }
+    // проверяет нажатие esc
     if (props.isOpen) {
         window.addEventListener('keydown', (evt) => handleEscClose(evt))
     }
@@ -37,7 +57,10 @@ function PopupWithForm(props) {
             onClick={closePopupByClickingOverlay}
         >
             <div className="popup__container">
-                <button className="link popup__close-button" onClick={close} />
+                <button
+                    className="link popup__close-button"
+                    onClick={closeReset}
+                />
                 <form
                     className={`popup__form popup__form_type_${props.name}`}
                     noValidate
