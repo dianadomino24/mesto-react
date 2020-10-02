@@ -3,7 +3,7 @@ import api from '../utils/api'
 import Header from './Header'
 import Main from './Main'
 import Footer from './Footer'
-import PopupWithForm from './PopupWithForm'
+import PopupWithSubmit from './PopupWithSubmit'
 import ImagePopup from './ImagePopup'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
@@ -16,6 +16,8 @@ function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+    const [isCardDeletePopupOpen, setIsCardDeletePopupOpen] = useState(false)
+    const [isImgPopupOpen, setIsImgPopupOpen] = useState(false)
 
     const [cards, setCards] = useState([])
 
@@ -29,6 +31,8 @@ function App() {
     })
     // для попапа с полноразмерной картинкой
     const [selectedCard, setSelectedCard] = useState()
+    // для удаления карточки
+    const [selectedCardDOM, setSelectedCardDOM] = useState()
 
     // открывают попапы
     function handleEditAvatarClick() {
@@ -44,6 +48,7 @@ function App() {
     //для открытия попапа с увеличенной картинкой
     function handleCardClick(card) {
         setSelectedCard(card)
+        setIsImgPopupOpen(true)
     }
 
     // закрывает все попапы меняя их состояние
@@ -55,6 +60,9 @@ function App() {
         setIsEditProfilePopupOpen(false)
         setIsAddPlacePopupOpen(false)
         setSelectedCard()
+        setIsCardDeletePopupOpen(false)
+        setIsImgPopupOpen(false)
+        setSelectedCardDOM()
     }
 
     // при монтировании компонента будет совершать запрос в API за пользовательскими данными и карточками
@@ -84,7 +92,7 @@ function App() {
     const loadingText = 'Сохранение...'
     const defaultSaveText = 'Сохранить'
     const defaultCreateText = 'Создать'
-    // const defaultYesText = 'Да'
+    const defaultYesText = 'Да'
     // заменит текст кнопок при ожидании процесса загрузки данных на сервер
     function renderLoading(isLoading, button, text) {
         if (isLoading) {
@@ -112,16 +120,32 @@ function App() {
             })
     }
 
-    // удаляет карточку
-    function handleCardDelete(card, cardDOMElement) {
+    function handleCardDeleteSubmit(card, cardDOMElement) {
+        const cardDeleteSubmitButton = document.querySelector(
+            '.popup__save-button_type_card-delete'
+        )
+        // ожидание загрузки
+        renderLoading(true, cardDeleteSubmitButton, defaultYesText)
         api.deleteItem('cards', card._id)
             .then(() => {
                 //вызывает удаление карточки из разметки
                 cardDOMElement.remove()
             })
+            .then(() => {
+                closeAllPopups()
+            })
             .catch((err) => {
                 console.log(err)
             })
+            .finally(() =>
+                renderLoading(false, cardDeleteSubmitButton, defaultYesText)
+            )
+    }
+    // удаляет карточку
+    function handleCardDelete(card, cardDOMElement) {
+        setIsCardDeletePopupOpen(true)
+        setSelectedCard(card)
+        setSelectedCardDOM(cardDOMElement)
     }
     // обновляет профиль
     function handleUpdateUser(userData) {
@@ -237,15 +261,20 @@ function App() {
                             onUpdateAvatar={handleUpdateAvatar}
                         />
 
-                        <PopupWithForm
+                        <PopupWithSubmit
                             title="Вы уверены?"
                             name="card-delete"
+                            card={selectedCard}
+                            cardDOM={selectedCardDOM}
                             buttonText="Да"
-                            isOpen={false}
+                            isOpen={isCardDeletePopupOpen}
                             onClose={closeAllPopups}
-                        ></PopupWithForm>
+                            onCardDeleteSubmit={handleCardDeleteSubmit}
+                        ></PopupWithSubmit>
 
                         <ImagePopup
+                            name="picture-zoom"
+                            isOpen={isImgPopupOpen}
                             card={selectedCard}
                             onClose={closeAllPopups}
                         />

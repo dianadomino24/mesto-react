@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ImagePopup({ card, onClose }) {
+function ImagePopup({ card, onClose, isOpen, name }) {
     function close() {
         onClose()
         window.removeEventListener('keydown', handleEscClose)
@@ -23,7 +23,9 @@ function ImagePopup({ card, onClose }) {
 
         return (
             <section
-                className="popup popup_opened popup_type_picture-zoom"
+                className={`popup popup_type_${name} ${
+                    isOpen && 'popup_opened'
+                }`}
                 onClick={closePopupByClickingOverlay}
             >
                 <div className="popup__container-pic-zoom">

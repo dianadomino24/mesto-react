@@ -12,6 +12,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
             name: cardName,
             link: cardDescription,
         })
+        setCardName('')
+        setCardDescription('')
     }
 
     function handleNameChange(e) {
@@ -20,6 +22,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     function handleDescibChange(e) {
         setCardDescription(e.target.value)
     }
+    function close() {
+        setCardName('')
+        setCardDescription('')
+        onClose()
+    }
 
     return (
         <PopupWithForm
@@ -27,7 +34,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
             name="add-place"
             buttonText="Создать"
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={close}
             onSubmit={handleSubmit}
         >
             <label className="popup__label">
