@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import PopupWithForm from './PopupWithForm'
 
-function AddPlacePopup(props) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     const [cardName, setCardName] = useState('')
     const [cardDescription, setCardDescription] = useState('')
 
     function handleSubmit(e) {
         e.preventDefault()
 
-        props.onAddPlace({
+        onAddPlace({
             name: cardName,
             link: cardDescription,
         })
@@ -26,13 +26,14 @@ function AddPlacePopup(props) {
             title="Новое место"
             name="add-place"
             buttonText="Создать"
-            isOpen={props.isOpen}
-            onClose={props.onClose}
+            isOpen={isOpen}
+            onClose={onClose}
             onSubmit={handleSubmit}
         >
             <label className="popup__label">
                 <input
                     type="text"
+                    value={cardName}
                     onChange={handleNameChange}
                     name="place-name"
                     placeholder="Название"
@@ -47,6 +48,7 @@ function AddPlacePopup(props) {
             <label className="popup__label">
                 <input
                     type="url"
+                    value={cardDescription}
                     onChange={handleDescibChange}
                     name="place-pic"
                     id="place-pic"

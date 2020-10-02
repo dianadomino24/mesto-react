@@ -98,14 +98,18 @@ function App() {
         const isLiked = card.likes.some((i) => i._id === currentUser._id)
 
         // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-            // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-            const newCards = cards.map((c) =>
-                c._id === card._id ? newCard : c
-            )
-            // Обновляем стейт
-            setCards(newCards)
-        })
+        api.changeLikeCardStatus(card._id, !isLiked)
+            .then((newCard) => {
+                // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
+                const newCards = cards.map((c) =>
+                    c._id === card._id ? newCard : c
+                )
+                // Обновляем стейт
+                setCards(newCards)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     // удаляет карточку
@@ -253,31 +257,3 @@ function App() {
 }
 
 export default App
-
-// // при монтировании компонента будет совершать запрос в API за карточками мест
-// useEffect(() => {
-//     api.getItems('cards')
-//         .then((serverCards) => {
-//             const items = serverCards.map((item) => ({
-//                 name: item.name,
-//                 link: item.link,
-//                 _id: item._id,
-//                 likes: item.likes,
-//                 owner: item.owner,
-//             }))
-//             setCards(items)
-//         })
-//         .catch((err) => {
-//             console.log(err)
-//         })
-// }, [])
-
-// useEffect(() => {
-//     api.getItems('users/me')
-//         .then((userData) => {
-//             setCurrentUser(userData)
-//         })
-//         .catch((err) => {
-//             console.log(err)
-//         })
-// }, [])

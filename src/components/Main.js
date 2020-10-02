@@ -2,7 +2,15 @@ import React from 'react'
 import Card from './Card'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
-function Main(props) {
+function Main({
+    onEditProfile,
+    onAddPlace,
+    onEditAvatar,
+    handleCardClick,
+    cards,
+    onCardLike,
+    onCardDelete,
+}) {
     const currentUserData = React.useContext(CurrentUserContext)
 
     return (
@@ -10,7 +18,7 @@ function Main(props) {
             <section className="profile section">
                 <div
                     className="profile__image"
-                    onClick={props.onEditAvatar}
+                    onClick={onEditAvatar}
                     style={{
                         backgroundImage: `url(${currentUserData.avatar})`,
                     }}
@@ -22,26 +30,26 @@ function Main(props) {
                         </h1>
                         <button
                             className="link profile__edit-button"
-                            onClick={props.onEditProfile}
+                            onClick={onEditProfile}
                         />
                     </div>
                     <p className="profile__job">{currentUserData.about}</p>
                 </div>
                 <button
                     className="link profile__add-button"
-                    onClick={props.onAddPlace}
+                    onClick={onAddPlace}
                 />
             </section>
             <section className="places section">
                 <ul className="places__list">
                     <li className="places__empty-list">Нет добавленных мест</li>
-                    {props.cards.map((card) => (
+                    {cards.map((card) => (
                         <Card
                             key={card._id}
-                            onCardClick={props.handleCardClick}
+                            onCardClick={handleCardClick}
                             card={card}
-                            onCardLike={props.onCardLike}
-                            onCardDelete={props.onCardDelete}
+                            onCardLike={onCardLike}
+                            onCardDelete={onCardDelete}
                             {...card}
                         />
                     ))}

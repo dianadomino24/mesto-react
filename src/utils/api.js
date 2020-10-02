@@ -4,14 +4,17 @@ class Api {
         this.headers = headers
     }
 
+    _getResponseData(res) {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(new Error(`Ошибка: ${res.status}`))
+    }
     getItems(label) {
         return fetch(this.baseUrl.concat(label), {
             headers: this.headers,
         }).then((res) => {
-            if (res.ok) {
-                return res.json()
-            }
-            return Promise.reject(`Ошибка: ${res.status}`)
+            return this._getResponseData(res)
         })
     }
 
@@ -21,10 +24,7 @@ class Api {
             headers: this.headers,
             body: JSON.stringify(item),
         }).then((res) => {
-            if (res.ok) {
-                return res.json()
-            }
-            return Promise.reject(`Ошибка: ${res.status}`)
+            return this._getResponseData(res)
         })
     }
 
@@ -34,10 +34,7 @@ class Api {
             headers: this.headers,
             body: JSON.stringify(item),
         }).then((res) => {
-            if (res.ok) {
-                return res.json()
-            }
-            return Promise.reject(`Ошибка: ${res.status}`)
+            return this._getResponseData(res)
         })
     }
 
@@ -55,10 +52,7 @@ class Api {
             headers: this.headers,
             // body: JSON.stringify(item)
         }).then((res) => {
-            if (res.ok) {
-                return res.json()
-            }
-            return Promise.reject(`Ошибка: ${res.status}`)
+            return this._getResponseData(res)
         })
     }
 
@@ -67,10 +61,7 @@ class Api {
             method: 'DELETE',
             headers: this.headers,
         }).then((res) => {
-            if (res.ok) {
-                return res.json()
-            }
-            return Promise.reject(`Ошибка: ${res.status}`)
+            return this._getResponseData(res)
         })
     }
 }

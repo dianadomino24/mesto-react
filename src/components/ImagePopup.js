@@ -1,21 +1,25 @@
 import React from 'react'
 
-function ImagePopup(props) {
+function ImagePopup({ card, onClose }) {
+    function close() {
+        onClose()
+        window.removeEventListener('keydown', handleEscClose)
+    }
     //закрывает при нажатии esc
     function handleEscClose(evt) {
         if (evt.key === 'Escape') {
-            props.onClose()
+            close()
         }
     }
     //закрывает попап при нажатии на фон
     function closePopupByClickingOverlay(event) {
         if (event.target === event.currentTarget) {
-            props.onClose()
+            close()
         }
     }
 
-    if (props.card) {
-        window.addEventListener('keydown', (evt) => handleEscClose(evt))
+    if (card) {
+        window.addEventListener('keydown', handleEscClose)
 
         return (
             <section
@@ -25,15 +29,15 @@ function ImagePopup(props) {
                 <div className="popup__container-pic-zoom">
                     <button
                         className="link popup__close-button"
-                        onClick={props.onClose}
+                        onClick={close}
                     />
                     <figure className="picture-zoom">
                         <img
-                            src={props.card.link}
-                            alt={props.card.name}
+                            src={card.link}
+                            alt={card.name}
                             className="picture-zoom__img"
                         />
-                        <p className="picture-zoom__title">{props.card.name}</p>
+                        <p className="picture-zoom__title">{card.name}</p>
                     </figure>
                 </div>
             </section>

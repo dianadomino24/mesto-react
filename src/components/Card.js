@@ -1,26 +1,35 @@
 import React from 'react'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
-export default function Card(props) {
+export default function Card({
+    onCardClick,
+    card,
+    onCardLike,
+    onCardDelete,
+    owner,
+    likes,
+    name,
+    link,
+}) {
     // будет открывать попап с картинкой
     function handleClick() {
-        props.onCardClick(props.card)
+        onCardClick(card)
     }
     function handleLike() {
-        props.onCardLike(props.card)
+        onCardLike(card)
     }
     function handleDelete(evt) {
         //сохраняет дом элемент, который надо будет удалить из разметки
         const placeEvt = evt.target.closest('.places__item')
-        props.onCardDelete(props.card, placeEvt)
+        onCardDelete(card, placeEvt)
     }
     const currentUserData = React.useContext(CurrentUserContext)
 
     // Определяем, являемся ли мы владельцем текущей карточки
-    const isOwn = props.owner._id === currentUserData._id
+    const isOwn = owner._id === currentUserData._id
 
     // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
-    const isLiked = props.likes.some((i) => i._id === currentUserData._id)
+    const isLiked = likes.some((i) => i._id === currentUserData._id)
 
     // Создаём переменную, которую после зададим в `className` для кнопки лайка
     const cardLikeButtonClassName = isLiked
@@ -40,13 +49,13 @@ export default function Card(props) {
                     onClick={handleDelete}
                 />
                 <img
-                    src={props.link}
-                    alt={props.name}
+                    src={link}
+                    alt={name}
                     className="place__image"
                     onClick={handleClick}
                 />
                 <div className="place__wrapper">
-                    <h2 className="place__name">{props.name} </h2>
+                    <h2 className="place__name">{name} </h2>
                     <button className="place__like-button-container">
                         {/* проверит, залайкана ли мной ранее карточка*/}
                         <div
@@ -54,7 +63,7 @@ export default function Card(props) {
                             onClick={handleLike}
                         ></div>
                         <div className="place__like-counter">
-                            {props.likes.length}
+                            {likes.length}
                         </div>
                     </button>
                 </div>
